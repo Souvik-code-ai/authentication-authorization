@@ -1,91 +1,159 @@
-import React, { useState } from "react";
+import {
+  useState,
+  type ChangeEvent,
+} from "react";
+
 import SidebarUser from "./SidebarUser";
 import HeaderUser from "./HeaderUser";
 
-const UserDashboard = ({ currentUser }) => {
 
-  const [activePage, setActivePage] = useState("dashboard");
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
 
-  const [editMode, setEditMode] = useState(false);
 
-  const [userData, setUserData] = useState({
-    name: currentUser.name,
-    email: currentUser.email,
-    role: currentUser.role,
-  });
+interface UserDashboardProps {
+  currentUser: User;
+}
 
-  const API = "https://69b17104adac80b427c530f7.mockapi.io/users";
 
-  // ✅ HANDLE INPUT CHANGE
-  const handleChange = (e) => {
+interface UserData {
+  name: string;
+  email: string;
+  role: string;
+}
+
+const UserDashboard = ({
+  currentUser,
+}: UserDashboardProps) => {
+
+
+  const [activePage, setActivePage] =
+    useState<string>("dashboard");
+
+
+  const [editMode, setEditMode] =
+    useState<boolean>(false);
+
+ 
+  const [userData, setUserData] =
+    useState<UserData>({
+      name: currentUser.name,
+      email: currentUser.email,
+      role: currentUser.role,
+    });
+
+  const API =
+    "https://69b17104adac80b427c530f7.mockapi.io/users";
+
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ): void => {
+
     setUserData({
       ...userData,
       [e.target.name]: e.target.value,
     });
   };
 
-  // ✅ UPDATE USER
-  const handleUpdate = async () => {
 
-    const res = await fetch(`${API}/${currentUser.id}`, {
-      method: "PUT",
+  const handleUpdate =
+    async (): Promise<void> => {
 
-      headers: {
-        "Content-Type": "application/json",
-      },
+      try {
 
-      body: JSON.stringify({
-        ...currentUser,
-        ...userData,
-      }),
-    });
+        const res = await fetch(
+          `${API}/${currentUser.id}`,
+          {
+            method: "PUT",
 
-    const updatedUser = await res.json();
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(updatedUser)
-    );
+            body: JSON.stringify({
+              ...currentUser,
+              ...userData,
+            }),
+          }
+        );
 
-    setEditMode(false);
+        const updatedUser: User =
+          await res.json();
 
-    alert("Profile Updated Successfully");
-  };
+        localStorage.setItem(
+          "user",
+          JSON.stringify(updatedUser)
+        );
 
-  // ✅ DELETE ACCOUNT
-  const handleDelete = async () => {
+        setEditMode(false);
 
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account?"
-    );
+        alert(
+          "Profile Updated Successfully"
+        );
 
-    if (!confirmDelete) return;
+      } catch (error) {
 
-    await fetch(`${API}/${currentUser.id}`, {
-      method: "DELETE",
-    });
+        console.log(
+          "Update Error",
+          error
+        );
+      }
+    };
 
-    localStorage.removeItem("user");
+  const handleDelete =
+    async (): Promise<void> => {
 
-    window.location.href = "/";
-  };
+      const confirmDelete =
+        window.confirm(
+          "Are you sure you want to delete your account?"
+        );
+
+      if (!confirmDelete) return;
+
+      try {
+
+        await fetch(
+          `${API}/${currentUser.id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        localStorage.removeItem("user");
+
+        window.location.href = "/";
+
+      } catch (error) {
+
+        console.log(
+          "Delete Error",
+          error
+        );
+      }
+    };
 
   return (
     <div className="flex min-h-screen bg-gray-200">
 
-      {/* SIDEBAR */}
-      <SidebarUser setActivePage={setActivePage} />
 
-      {/* MAIN CONTENT */}
+      <SidebarUser
+        setActivePage={setActivePage}
+      />
+
+     
       <div className="flex-1 p-6">
 
-        {/* HEADER */}
+   
         <HeaderUser
           currentUser={currentUser}
-          setActivePage={setActivePage}
         />
 
-        {/* ✅ DASHBOARD SECTION */}
         {activePage === "dashboard" && (
 
           <div className="bg-white p-6 rounded-xl shadow">
@@ -98,17 +166,26 @@ const UserDashboard = ({ currentUser }) => {
 
               <p>
                 Welcome back,
-                <strong> {currentUser.name}</strong>
+                <strong>
+                  {" "}
+                  {currentUser.name}
+                </strong>
               </p>
 
               <p>
                 Your role is:
-                <strong> {currentUser.role}</strong>
+                <strong>
+                  {" "}
+                  {currentUser.role}
+                </strong>
               </p>
 
               <p>
                 Your registered email:
-                <strong> {currentUser.email}</strong>
+                <strong>
+                  {" "}
+                  {currentUser.email}
+                </strong>
               </p>
 
             </div>
@@ -116,7 +193,7 @@ const UserDashboard = ({ currentUser }) => {
           </div>
         )}
 
-        {/* ✅ PROFILE SECTION */}
+
         {activePage === "profile" && (
 
           <div className="bg-white p-6 rounded-xl shadow max-w-2xl">
@@ -128,7 +205,7 @@ const UserDashboard = ({ currentUser }) => {
             {editMode ? (
 
               <>
-                {/* EDIT FORM */}
+
 
                 <div className="space-y-4">
 
@@ -158,6 +235,7 @@ const UserDashboard = ({ currentUser }) => {
 
                 </div>
 
+         
                 <div className="flex gap-4 mt-6">
 
                   <button
@@ -168,7 +246,9 @@ const UserDashboard = ({ currentUser }) => {
                   </button>
 
                   <button
-                    onClick={() => setEditMode(false)}
+                    onClick={() =>
+                      setEditMode(false)
+                    }
                     className="bg-gray-500 text-white px-5 py-2 rounded"
                   >
                     Cancel
@@ -180,34 +260,39 @@ const UserDashboard = ({ currentUser }) => {
             ) : (
 
               <>
-                {/* USER INFO */}
+     
 
                 <div className="space-y-4 text-lg">
 
                   <p>
-                    <strong>Name:</strong> {userData.name}
+                    <strong>Name:</strong>{" "}
+                    {userData.name}
                   </p>
 
                   <p>
-                    <strong>Email:</strong> {userData.email}
+                    <strong>Email:</strong>{" "}
+                    {userData.email}
                   </p>
 
                   <p>
-                    <strong>Role:</strong> {userData.role}
+                    <strong>Role:</strong>{" "}
+                    {userData.role}
                   </p>
 
                   <p>
-                    <strong>User ID:</strong> {currentUser.id}
+                    <strong>User ID:</strong>{" "}
+                    {currentUser.id}
                   </p>
 
                 </div>
 
-                {/* BUTTONS */}
 
                 <div className="flex gap-4 mt-6">
 
                   <button
-                    onClick={() => setEditMode(true)}
+                    onClick={() =>
+                      setEditMode(true)
+                    }
                     className="bg-blue-500 text-white px-5 py-2 rounded"
                   >
                     Edit

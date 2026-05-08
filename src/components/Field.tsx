@@ -1,6 +1,6 @@
 import React from "react";
 
-// ✅ Define interface
+
 interface FieldProps {
   name: string;
   logo: React.ReactNode;
@@ -10,7 +10,6 @@ interface FieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-// ✅ Use interface in component
 const Field: React.FC<FieldProps> = ({
   name,
   logo,
