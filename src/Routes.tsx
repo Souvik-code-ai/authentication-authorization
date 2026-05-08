@@ -4,7 +4,6 @@ import Signin from "./Signin";
 import Signup from "./Signup";
 import Home from "./Home";
 
-// 🔐 Protected Route
 const ProtectedRoute = ({ children }) => {
   const user = localStorage.getItem("user");
 
@@ -15,11 +14,10 @@ const RoutesFile = () => {
   return (
     <div className="flex flex-row justify-center items-center bg-gray-200 py-4 min-h-screen">
       <Routes>
-        {/* Public Routes */}
+     
         <Route path="/" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected Route */}
         <Route
           path="/home"
           element={
