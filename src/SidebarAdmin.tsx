@@ -44,6 +44,7 @@ const SidebarAdmin = ({
         await res.json();
 
       setUsers(data);
+      console.log(users)
 
     } catch (error) {
       console.log(
@@ -54,14 +55,14 @@ const SidebarAdmin = ({
   };
 
 
-  const totalAdmins = users.filter(
-    (user) => user.role === "admin"
-  ).length;
+  // const totalAdmins = users.filter(
+  //   (user) => user.role === "admin"
+  // ).length;
 
 
-  const totalUsers = users.filter(
-    (user) => user.role === "user"
-  ).length;
+  // const totalUsers = users.filter(
+  //   (user) => user.role === "user"
+  // ).length;
 
   return (
     <div className="w-64 bg-black text-white p-5 min-h-screen">
@@ -114,14 +115,14 @@ const SidebarAdmin = ({
 
 
 
-      <div className="bg-gray-800 p-4 rounded-xl space-y-4">
-
+      {/* <div className="bg-gray-800 p-4 rounded-xl space-y-4"> */}
+{/* 
         <h3 className="text-xl font-semibold">
           Analytics
-        </h3>
+        </h3> */}
 
 
-        <div className="bg-blue-500 p-3 rounded-lg">
+        {/* <div className="bg-blue-500 p-3 rounded-lg">
 
           <p className="text-sm">
             Total Admins
@@ -131,10 +132,10 @@ const SidebarAdmin = ({
             {totalAdmins}
           </h2>
 
-        </div>
+        </div> */}
 
 
-        <div className="bg-green-500 p-3 rounded-lg">
+        {/* <div className="bg-green-500 p-3 rounded-lg">
 
           <p className="text-sm">
             Total Users
@@ -144,9 +145,9 @@ const SidebarAdmin = ({
             {totalUsers}
           </h2>
 
-        </div>
+        </div> */}
 
-      </div>
+      {/* </div> */}
 
     </div>
   );
